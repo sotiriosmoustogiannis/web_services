@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import SearchForm
+from django.views.generic import ListView
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.views.generic.base import View
@@ -71,6 +72,7 @@ def preprocess(text):
     tokens = text.lower()
     tokens = tokens.split()
     return tokens
+
 
 def about(request):
     return render(request,'search/about.html',)

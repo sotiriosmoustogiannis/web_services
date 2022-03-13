@@ -1,6 +1,9 @@
 from multiprocessing import context
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from .models import Shop, User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.generic.base import View
@@ -43,4 +46,45 @@ def profile(request):
     return render(request,'users/profile.html', context)
 
 
+def shop(request):
+    context = {
+        'shops': Shop.objects.all()
+    }
+    return render(request, 'users/shop.html', context)
 
+class ShopListView(ListView):
+    model = Shop
+    template_name = 'users/shop.html'
+    context_object_name = 'shops'
+
+class ShopCreateView(LoginRequiredMixin, CreateView):
+    model = Shop
+    fields = ['store_name']
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class ShopUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Shop
+    fields = ['store_name']
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        shop = self.get_object()
+        if self.request.user == shop.user:
+            return True
+        return False
+
+class ShopDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Shop
+    success_url = '/'
+
+    def test_func(self):
+        shop = self.get_object()
+        if self.request.user == shop.user:
+            return True
+        return False
