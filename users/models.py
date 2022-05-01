@@ -1,4 +1,6 @@
+from pickle import TRUE
 from django.db import models
+#from fields import PickledObjectField
 from django.contrib.auth.models import User
 from pytz import timezone
 from django.utils import timezone
@@ -10,7 +12,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.user.ussername} Profile'
+        return f'{self.user.username} Profile'
 
 
 class Shop(models.Model):
@@ -23,3 +25,11 @@ class Shop(models.Model):
 
     def get_absolute_url(self):
        return reverse('shop')
+
+class Pickles(models.Model):
+    store_pickle_before = models.FileField(null=True)
+    store_pickle_after = models.FileField(null=True)
+    #shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+
+    def _str__(self):
+        return self.pk

@@ -1,9 +1,9 @@
 from multiprocessing import context
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from .models import Shop, User
+from .models import Shop, User, Pickles
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.generic.base import View
@@ -14,7 +14,8 @@ import time
 import numpy as np
 from tkinter import filedialog
 import pandas as pd
-
+from django import forms
+from .forms import UploadFileForm
 
 def register(request):
     if request.method == 'POST':
@@ -88,3 +89,15 @@ class ShopDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user == shop.user:
             return True
         return False
+
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        file_before = request.FILES['file_before']
+        file_after = request.FILES['file_after']
+        pickle = Pickles.objects.create(store_pickle_before = file_before, store_pickle_after=file_after)
+        pickle.save()
+        return HttpResponse("The shop with id " + str(pickle.pk) + "has the file: " + str(pickle.store_pickle_after))
+    else:
+        form = UploadFileForm()
+    return render(request, 'users/upload.html', {'form': form})

@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import Profile, Shop
+from .models import Profile, Shop, Pickles
 # Register your models here.
 
 
 admin.site.register(Profile)
 admin.site.register(Shop)
+admin.site.register(Pickles)

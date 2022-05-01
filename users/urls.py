@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import ShopListView, ShopCreateView, ShopUpdateView, ShopDeleteView
+from .views import ShopListView, ShopCreateView, ShopUpdateView, ShopDeleteView, upload_file
 from . import views
 
 urlpatterns = [
@@ -11,5 +11,6 @@ urlpatterns = [
     path('shop/', ShopListView.as_view(), name='shop'),
     path('shop/new/', ShopCreateView.as_view(), name='shop-create'),
     path('shop/<int:pk>/update/', ShopUpdateView.as_view(), name='shop-update'),
-    path('shop/<int:pk>/delete/', ShopDeleteView.as_view(), name='shop-delete')
+    path('shop/<int:pk>/delete/', ShopDeleteView.as_view(), name='shop-delete'),
+    path('list/', views.upload_file, name='list')
 ]

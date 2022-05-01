@@ -10,6 +10,7 @@ import time
 import numpy as np
 from tkinter import filedialog
 import pandas as pd
+from users.models import Pickles
 
 # Create your views here.
 
@@ -33,9 +34,12 @@ def home(request):
 
             print(response_time, availability)
             
-            text = response_time + " " + availability + " " + throughput + " " + successability + " " + reliability + " " + compliance + " " + best_practices + " " + latency + " " + documentation + " " + service_name
+            text = response_time + " " + availability + " " + throughput + " " + successability + " " + reliability + " " + compliance + " " + best_practices + " " + latency + " " + documentation + " " + service_name+ " " + Wsdl_address
 
-            pickle_in1 = open("dict.pickledb", "rb")
+            pickle_name_before = Pickles.objects.get(pk=8)
+            print(pickle_name_before.store_pickle_before)
+            
+            pickle_in1 = open(str(pickle_name_before.store_pickle_before), "rb")
             database = pickle.load(pickle_in1)
 
             perms = 256
@@ -45,7 +49,11 @@ def home(request):
 
             print(start_time)
 
-            pickle_in = open("dict.pickle", "rb")
+            pickle_name_after = Pickles.objects.get(pk=8)
+            print(pickle_name_after.store_pickle_after)
+           
+
+            pickle_in = open(str(pickle_name_after.store_pickle_after), "rb")
             example_dict = pickle.load(pickle_in)
 
             tokens = preprocess(text)
